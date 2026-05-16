@@ -11,43 +11,53 @@ public static class AnalyticsEndpoints
             "/api/analytics/summary",
             async (AppDbContext db) =>
             {
-                var totalMerchants = await db.Merchants.CountAsync();
-                var totalTransactions = await db.Transactions.CountAsync();
+                try
+                {
+                    var totalTransactions = await db.Transactions.CountAsync();
 
-                var approvedTransactions = await db.Transactions.CountAsync(t =>
-                    t.Status == "Approved"
-                );
+                    var totalVolume =
+                        await db.Transactions.Select(t => (decimal?)t.Amount).SumAsync() ?? 0m;
 
-                var pendingMerchants = await db.Merchants.CountAsync(m => m.Status == "Pending");
+                    var approvedTransactions = await db.Transactions.CountAsync(t =>
+                        t.Status == "Approved"
+                    );
 
-                var highRiskMerchants = await db.Merchants.CountAsync(m => m.RiskLevel == "High");
+                    var declinedTransactions = await db.Transactions.CountAsync(t =>
+                        t.Status == "Declined"
+                    );
 
-                var chargebacks = await db.Transactions.CountAsync(t => t.Chargeback);
+                    var pendingTransactions = await db.Transactions.CountAsync(t =>
+                        t.Status == "Pending"
+                    );
 
-                var transactionVolume = await db.Transactions.SumAsync(t => t.Amount);
+                    var approvalRate =
+                        totalTransactions == 0
+                            ? 0
+                            : Math.Round(
+                                (decimal)approvedTransactions / totalTransactions * 100,
+                                2
+                            );
 
-                var approvalRate =
-                    totalTransactions == 0
-                        ? 0
-                        : Math.Round((decimal)approvedTransactions / totalTransactions * 100, 2);
+                    var averageTransactionAmount =
+                        totalTransactions == 0 ? 0 : Math.Round(totalVolume / totalTransactions, 2);
 
-                var chargebackRatio =
-                    totalTransactions == 0
-                        ? 0
-                        : Math.Round((decimal)chargebacks / totalTransactions * 100, 2);
-
-                return Results.Ok(
-                    new
-                    {
-                        TotalMerchants = totalMerchants,
-                        TotalTransactions = totalTransactions,
-                        TransactionVolume = transactionVolume,
-                        ApprovalRate = approvalRate,
-                        PendingMerchants = pendingMerchants,
-                        HighRiskMerchants = highRiskMerchants,
-                        ChargebackRatio = chargebackRatio,
-                    }
-                );
+                    return Results.Ok(
+                        new
+                        {
+                            totalTransactions,
+                            totalVolume,
+                            averageTransactionAmount,
+                            approvedTransactions,
+                            declinedTransactions,
+                            pendingTransactions,
+                            approvalRate,
+                        }
+                    );
+                }
+                catch (Exception ex)
+                {
+                    return Results.Problem(title: "Analytics summary failed", detail: ex.Message);
+                }
             }
         );
     }
