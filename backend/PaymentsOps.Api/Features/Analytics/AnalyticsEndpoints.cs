@@ -13,22 +13,15 @@ public static class AnalyticsEndpoints
             {
                 try
                 {
-                    var totalTransactions = await db.Transactions.CountAsync();
+                    var transactions = await db.Transactions.AsNoTracking().ToListAsync();
 
-                    var totalVolume =
-                        await db.Transactions.Select(t => (decimal?)t.Amount).SumAsync() ?? 0m;
+                    var totalTransactions = transactions.Count;
 
-                    var approvedTransactions = await db.Transactions.CountAsync(t =>
-                        t.Status == "Approved"
-                    );
+                    var totalVolume = transactions.Sum(t => t.Amount);
 
-                    var declinedTransactions = await db.Transactions.CountAsync(t =>
-                        t.Status == "Declined"
-                    );
-
-                    var pendingTransactions = await db.Transactions.CountAsync(t =>
-                        t.Status == "Pending"
-                    );
+                    var approvedTransactions = transactions.Count(t => t.Status == "Approved");
+                    var declinedTransactions = transactions.Count(t => t.Status == "Declined");
+                    var pendingTransactions = transactions.Count(t => t.Status == "Pending");
 
                     var approvalRate =
                         totalTransactions == 0
