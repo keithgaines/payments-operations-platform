@@ -9,10 +9,49 @@ public static class TransactionEndpoints
     {
         app.MapGet(
             "/api/transactions",
-            async (AppDbContext db) =>
+            async (
+                AppDbContext db,
+                string? status,
+                Guid? merchantId,
+                decimal? minAmount,
+                decimal? maxAmount,
+                DateTime? startDate,
+                DateTime? endDate
+            ) =>
             {
-                var transactions = await db
-                    .Transactions.Include(t => t.Merchant)
+                var query = db.Transactions.Include(t => t.Merchant).AsQueryable();
+
+                if (!string.IsNullOrWhiteSpace(status))
+                {
+                    query = query.Where(t => t.Status == status);
+                }
+
+                if (merchantId.HasValue)
+                {
+                    query = query.Where(t => t.MerchantId == merchantId.Value);
+                }
+
+                if (minAmount.HasValue)
+                {
+                    query = query.Where(t => t.Amount >= minAmount.Value);
+                }
+
+                if (maxAmount.HasValue)
+                {
+                    query = query.Where(t => t.Amount <= maxAmount.Value);
+                }
+
+                if (startDate.HasValue)
+                {
+                    query = query.Where(t => t.CreatedAt >= startDate.Value);
+                }
+
+                if (endDate.HasValue)
+                {
+                    query = query.Where(t => t.CreatedAt <= endDate.Value);
+                }
+
+                var transactions = await query
                     .OrderByDescending(t => t.CreatedAt)
                     .Take(100)
                     .ToListAsync();

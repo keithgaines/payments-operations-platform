@@ -5,22 +5,29 @@ function getApiBaseUrl() {
 }
 
 export type Transaction = {
-  id: number;
-  merchantId: number;
-  merchantName?: string | null;
+  id: string;
+  merchantId: string;
   amount: number;
   status: string;
-  paymentMethod?: string | null;
+  chargeback: boolean;
   createdAt: string;
+  merchant?: {
+    id: string;
+    name: string;
+    status: string;
+    riskLevel: string;
+    createdAt: string;
+  };
 };
 
 export type AnalyticsSummary = {
-  totalVolume: number;
+  totalMerchants: number;
   totalTransactions: number;
-  successfulTransactions: number;
-  failedTransactions: number;
-  pendingTransactions: number;
-  successRate: number;
+  transactionVolume: number;
+  approvalRate: number;
+  pendingMerchants: number;
+  highRiskMerchants: number;
+  chargebackRatio: number;
 };
 
 export type Merchant = {
@@ -28,6 +35,13 @@ export type Merchant = {
   name: string;
   industry?: string | null;
   status?: string | null;
+};
+
+export type TransactionFilters = {
+  status?: string;
+  merchantId?: string;
+  minAmount?: number;
+  maxAmount?: number;
 };
 
 async function fetchJson<T>(path: string): Promise<T> {
@@ -46,16 +60,40 @@ export function getAnalyticsSummary() {
   return fetchJson<AnalyticsSummary>("/api/analytics/summary");
 }
 
-export function getTransactions() {
-  return fetchJson<Transaction[]>("/api/transactions");
+export async function getTransactions(filters?: TransactionFilters) {
+  const params = new URLSearchParams();
+
+  if (filters?.status) {
+    params.append("status", filters.status);
+  }
+
+  if (filters?.merchantId) {
+    params.append("merchantId", filters.merchantId);
+  }
+
+  if (filters?.minAmount !== undefined) {
+    params.append("minAmount", filters.minAmount.toString());
+  }
+
+  if (filters?.maxAmount !== undefined) {
+    params.append("maxAmount", filters.maxAmount.toString());
+  }
+
+  const queryString = params.toString();
+
+  const url = queryString
+    ? `/api/transactions?${queryString}`
+    : "/api/transactions";
+
+  return fetchJson<Transaction[]>(url);
 }
 
 export function getMerchants() {
   return fetchJson<Merchant[]>("/api/merchants");
 }
 
-export async function getRecentTransactions() {
-  const transactions = await getTransactions();
+export async function getRecentTransactions(filters?: TransactionFilters) {
+  const transactions = await getTransactions(filters);
 
   return transactions
     .sort(
