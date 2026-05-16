@@ -10,8 +10,6 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection"))
 );
 
-builder.Services.AddOpenApi();
-
 builder.Services.AddCors(options =>
 {
     options.AddPolicy(
@@ -33,10 +31,6 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseCors("Frontend");
-if (app.Environment.IsDevelopment())
-{
-    app.MapOpenApi();
-}
 
 app.UseHttpsRedirection();
 
