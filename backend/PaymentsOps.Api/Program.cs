@@ -61,9 +61,16 @@ app.MapGet(
     "/health/db",
     async (AppDbContext db) =>
     {
-        var canConnect = await db.Database.CanConnectAsync();
+        try
+        {
+            var canConnect = await db.Database.CanConnectAsync();
 
-        return Results.Ok(new { status = "ok", canConnect });
+            return Results.Ok(new { status = "ok", canConnect });
+        }
+        catch (Exception ex)
+        {
+            return Results.Problem(title: "Database connection failed", detail: ex.Message);
+        }
     }
 );
 
