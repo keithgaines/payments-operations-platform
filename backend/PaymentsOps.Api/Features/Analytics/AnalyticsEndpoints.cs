@@ -56,7 +56,10 @@ public static class AnalyticsEndpoints
                 }
                 catch (Exception ex)
                 {
-                    return Results.Problem(title: "Analytics summary failed", detail: ex.Message);
+                    return Results.Problem(
+                        title: "Analytics summary failed",
+                        detail: ex.ToString()
+                    );
                 }
             }
         );
