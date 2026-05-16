@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "bHntx6H32u8=",
+  "success": true,
+  "projectFilePath": "C:\\payments-operations-platform\\payments-operations-platform\\backend\\PaymentsOps.Api\\PaymentsOps.Api.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\keith\\.nuget\\packages\\microsoft.aspnetcore.openapi\\10.0.7\\microsoft.aspnetcore.openapi.10.0.7.nupkg.sha512",
+    "C:\\Users\\keith\\.nuget\\packages\\microsoft.openapi\\2.0.0\\microsoft.openapi.2.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
