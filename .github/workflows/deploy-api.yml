@@ -7,7 +7,7 @@ on:
 
 env:
   AZURE_WEBAPP_NAME: payments-ops-api
-  DOTNET_VERSION: "10.0.x"
+  DOTNET_VERSION: "8.0.x"
   PROJECT_PATH: backend/PaymentsOps.Api
 
 jobs:
@@ -30,7 +30,7 @@ jobs:
         run: dotnet build ${{ env.PROJECT_PATH }} --configuration Release --no-restore
 
       - name: Publish
-        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -o publish
+        run: dotnet publish ${{ env.PROJECT_PATH }} -c Release -r linux-x64 --self-contained false -o publish
 
       - name: Deploy to Azure
         uses: azure/webapps-deploy@v3
