@@ -1,10 +1,14 @@
-import type { Metadata } from 'next';
-import './globals.css';
+import type { Metadata, Viewport } from "next";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: 'Payments Operations Dashboard',
-  description: 'Professional fintech operations management platform',
-  viewport: 'width=device-width, initial-scale=1',
+  title: "Payments Operations Dashboard",
+  description: "Professional fintech operations management platform",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({

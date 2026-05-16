@@ -6,6 +6,7 @@ import {
 } from "../lib/api";
 
 import { TransactionFilters } from "./components/TransactionFilters";
+import { TransactionDetailDrawer } from "./components/TransactionDetailDrawer";
 
 function formatCurrency(value: number) {
   return new Intl.NumberFormat("en-US", {
@@ -156,48 +157,7 @@ export default async function Home({
               </div>
             </div>
             <TransactionFilters merchants={merchants} />
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-sm">
-                <thead>
-                  <tr className="border-b text-slate-500">
-                    <th className="py-3 font-medium">Merchant</th>
-                    <th className="py-3 font-medium">Amount</th>
-                    <th className="py-3 font-medium">Status</th>
-                    <th className="py-3 font-medium">Method</th>
-                    <th className="py-3 font-medium">Created</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {transactions.map((transaction) => (
-                    <tr
-                      key={transaction.id}
-                      className="border-b last:border-b-0"
-                    >
-                      <td className="py-3 font-medium text-slate-900">
-                        {transaction.merchant?.name ??
-                          `Merchant #${transaction.merchantId}`}
-                      </td>
-                      <td className="py-3 text-slate-700">
-                        {formatCurrency(transaction.amount)}
-                      </td>
-                      <td className="py-3">
-                        <span
-                          className={`rounded-full px-2.5 py-1 text-xs font-medium ${getStatusClass(
-                            transaction.status,
-                          )}`}
-                        >
-                          {transaction.status}
-                        </span>
-                      </td>
-                      <td className="py-3 text-slate-700">Card</td>
-                      <td className="py-3 text-slate-500">
-                        {formatDate(transaction.createdAt)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+            <TransactionDetailDrawer transactions={transactions} />
           </div>
 
           <aside className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
