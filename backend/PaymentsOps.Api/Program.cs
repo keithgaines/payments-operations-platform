@@ -12,8 +12,27 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddOpenApi();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "Frontend",
+        policy =>
+        {
+            policy
+                .WithOrigins(
+                    "http://localhost:3000",
+                    "https://payments-operations-platform.vercel.app",
+                    "https://payments-operations-platform-git-develop-keithgaines-projects.vercel.app"
+                )
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+    );
+});
+
 var app = builder.Build();
 
+app.UseCors("Frontend");
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
