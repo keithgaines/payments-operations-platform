@@ -1,8 +1,46 @@
 # Payments Operations Intelligence Platform
 
-A portfolio-grade fintech operations platform designed to simulate real-world workflows used by payments operations, merchant support, risk analysis, and business operations teams.
+Fintech operations tooling platform focused on transaction investigation workflows, merchant operations visibility, and operational intelligence.
 
-Built to demonstrate production-oriented engineering practices, operational tooling UX, and modern full-stack architecture patterns.
+Designed to simulate internal tooling patterns commonly used by:
+
+* Payments operations teams
+* Merchant support analysts
+* Risk operations analysts
+* Business operations organizations
+
+## Live Demo
+
+Frontend:
+[Payments Operations Platform](https://payments-operations-platform.vercel.app)
+
+Backend API Health:
+[API Health Endpoint](https://payments-ops-api-a9chf3hcfshbdehc.eastus-01.azurewebsites.net/health)
+
+Project Documentation:
+[Notion Workspace](https://www.notion.so/Payments-Operations-Intelligence-Platform-362a52107914805ebd3bc2e290c0fe4c)
+
+---
+
+## Overview
+
+The Payments Operations Intelligence Platform is a production-style fintech operations platform built to model how internal operations teams investigate transactions, monitor merchant activity, surface operational anomalies, and review risk indicators.
+
+The project emphasizes operational workflows and internal tooling UX rather than generic dashboard visualization.
+
+---
+
+## Architecture
+
+```text
+Next.js Frontend
+        ↓
+ASP.NET Core Minimal API
+        ↓
+Entity Framework Core
+        ↓
+PostgreSQL (Supabase)
+```
 
 ---
 
@@ -10,168 +48,161 @@ Built to demonstrate production-oriented engineering practices, operational tool
 
 ### Frontend
 
-- Next.js App Router
-- React
-- Tailwind CSS v4
-- TypeScript
+* Next.js 16 App Router
+* React
+* TypeScript
+* Tailwind CSS v4
 
 ### Backend
 
-- ASP.NET Core Minimal API (.NET 10)
-- Entity Framework Core
-- PostgreSQL
-- Supabase
+* ASP.NET Core Minimal API (.NET 8)
+* Entity Framework Core
+* PostgreSQL
+* Supabase
+* Npgsql
 
-### Architecture
+### Infrastructure
 
-- Monorepo structure
-- Server/Client Component separation
-- REST API integration
-- Code-first EF migrations
-- Feature branch Git workflow
+* Azure Linux App Service
+* Vercel
+* GitHub Actions CI/CD
+* Environment-based configuration
+* Cross-origin frontend/backend architecture
 
 ---
 
-## Features
+## Current Features
 
 ### Operational Dashboard
 
-- KPI analytics cards
-- Approval rate monitoring
-- Chargeback ratio monitoring
-- Merchant operational alerts
-- Transaction volume visibility
+* KPI analytics cards
+* Approval-rate visibility
+* Operational alerts
+* Merchant operational visibility
+* Transaction activity monitoring
 
 ### Transaction Operations
 
-- Live transaction API integration
-- Transaction filtering and search
-- Status visibility
-- Merchant context rendering
-- Risk-level indicators
+* Transaction listing
+* Filtering and search
+* Transaction investigation drawer
+* Merchant operational context
+* Risk-level indicators
+* Chargeback visibility
 
 ### Investigation Workflow
 
-- Clickable transaction rows
-- Transaction investigation drawer
-- Merchant operational context
-- Chargeback visibility
-- Operational review guidance
-- Keyboard-accessible modal interactions
-- Background scroll locking
-- Portal-rendered overlay architecture
+* Clickable transaction rows
+* Transaction investigation drawer
+* Keyboard-accessible modal interactions
+* Escape-key support
+* Body scroll locking
+* Portal-rendered overlay architecture
 
-### Engineering Quality
+### Backend APIs
 
-- Error boundaries
-- Loading states
-- Responsive layout
-- Accessible dialog semantics
-- Valid HTML table structure
-- App Router compatibility
-- Tailwind CSS v4 integration
+* Merchant endpoints
+* Transaction endpoints
+* Analytics summary endpoint
+* PostgreSQL persistence
+* EF Core code-first migrations
 
----
+### Deployment & Infrastructure
 
-# Transaction Investigation Workflow
-
-Operators can investigate transactions directly from the dashboard table.
-
-Clicking a transaction row opens a dedicated investigation drawer containing:
-
-- Merchant operational details
-- Risk indicators
-- Chargeback visibility
-- Transaction metadata
-- Operational review guidance
-
-This workflow simulates common tooling patterns used by:
-
-- Fintech operations teams
-- Merchant support analysts
-- Risk operations analysts
-- Payments investigation teams
-- Business operations organizations
+* Azure-hosted ASP.NET Core API
+* Vercel-hosted frontend
+* Supabase PostgreSQL integration
+* GitHub Actions deployment pipeline
+* Production environment configuration
 
 ---
 
-## Frontend Architecture
+## Engineering Challenges Solved
 
-The frontend uses a hybrid Server/Client Component architecture.
-
-### Server Components
-
-Responsible for:
-
-- Data fetching
-- API orchestration
-- Initial dashboard rendering
-- KPI aggregation
-
-### Client Components
-
-Responsible for:
-
-- Interactive workflows
-- Drawer state management
-- Keyboard interactions
-- Transaction investigation UX
-
-### Drawer Implementation
-
-The transaction investigation drawer:
-
-- Uses React portals
-- Renders outside the table DOM hierarchy
-- Avoids hydration mismatches
-- Preserves semantic HTML table structure
-- Supports accessibility-focused interactions
+* Resolved Next.js App Router hydration issues
+* Migrated frontend architecture to Tailwind CSS v4
+* Implemented React portal-based overlay rendering
+* Preserved semantic HTML table structure during interactive refactors
+* Separated server/client rendering responsibilities
+* Resolved Azure Linux App Service deployment/runtime issues
+* Fixed ASP.NET Core environment configuration binding
+* Stabilized Supabase PostgreSQL authentication and connection pooling
+* Implemented production frontend/backend deployment integration
 
 ---
 
-## Screenshots
+## Project Structure
 
-### Dashboard Overview
+```text
+/frontend
+    Next.js frontend application
 
-_Add screenshot here_
-
-### Transaction Investigation Drawer
-
-_Add screenshot here_
-
----
-
-## Git Workflow
-
-```txt
-main      -> production/stable
-develop   -> integration branch
-feature/* -> active feature development
-release/* -> release preparation
+/backend/PaymentsOps.Api
+    ASP.NET Core Minimal API
 ```
 
 ---
 
-## Future Enhancements
+## Local Development
 
-- Case management workflows
-- Transaction dispute timelines
-- Role-based authentication
-- Audit logging
-- Merchant health scoring
-- Export/reporting functionality
-- Real-time websocket updates
-- Operational SLA monitoring
+### Frontend
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+### Backend
+
+```bash
+cd backend/PaymentsOps.Api
+dotnet restore
+dotnet run
+```
 
 ---
 
-## Purpose
+## Production Deployment
 
-This project is intentionally designed to demonstrate:
+### Frontend
 
-- Operational product thinking
-- Production-focused frontend architecture
-- Backend API design
-- Data investigation workflows
-- Fintech operations tooling patterns
-- Engineering communication and maintainability
+* Hosted on [Vercel](https://vercel.com)
+
+### Backend
+
+* Hosted on [Azure App Service](https://azure.microsoft.com/en-us/products/app-service)
+
+### Database
+
+* PostgreSQL hosted via [Supabase](https://supabase.com)
+
+---
+
+## Current Development Focus
+
+* Operational workflow refinement
+* Backend analytics optimization
+* Investigation tooling enhancements
+* Expanded merchant operational visibility
+
+---
+
+## Planned Enhancements
+
+* Authentication
+* Role-based access control (RBAC)
+* Audit logging
+* Case management workflows
+* Real-time operational updates
+* SLA monitoring
+* Reporting/export workflows
+* Structured logging and observability
+
+---
+
+## Documentation
+
+Additional architecture, workflow, and product documentation is available in the project Notion workspace:
+
+[Payments Operations Intelligence Platform Documentation](https://www.notion.so/Payments-Operations-Intelligence-Platform-362a52107914805ebd3bc2e290c0fe4c)
