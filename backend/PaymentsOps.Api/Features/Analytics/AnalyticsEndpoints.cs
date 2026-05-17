@@ -17,11 +17,15 @@ public static class AnalyticsEndpoints
 
                     var totalTransactions = transactions.Count;
 
-                    var totalVolume = transactions.Sum(t => t.Amount);
-
                     var approvedTransactions = transactions.Count(t => t.Status == "Approved");
                     var declinedTransactions = transactions.Count(t => t.Status == "Declined");
                     var pendingTransactions = transactions.Count(t => t.Status == "Pending");
+
+                    var processedTransactions = transactions
+                        .Where(t => t.Status == "Approved")
+                        .ToList();
+
+                    var totalVolume = processedTransactions.Sum(t => t.Amount);
 
                     var approvalRate =
                         totalTransactions == 0
@@ -32,7 +36,9 @@ public static class AnalyticsEndpoints
                             );
 
                     var averageTransactionAmount =
-                        totalTransactions == 0 ? 0 : Math.Round(totalVolume / totalTransactions, 2);
+                        approvedTransactions == 0
+                            ? 0
+                            : Math.Round(totalVolume / approvedTransactions, 2);
 
                     return Results.Ok(
                         new
@@ -47,12 +53,9 @@ public static class AnalyticsEndpoints
                         }
                     );
                 }
-                catch (Exception ex)
+                catch
                 {
-                    return Results.Problem(
-                        title: "Analytics summary failed",
-                        detail: ex.ToString()
-                    );
+                    return Results.Problem(title: "Analytics summary failed");
                 }
             }
         );
