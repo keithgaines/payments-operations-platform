@@ -124,7 +124,7 @@ export default async function Home({
         <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
           <KpiCard
             title="Total Volume"
-            value={formatCurrency(summary.transactionVolume)}
+            value={formatCurrency(summary.totalVolume)}
             subtitle="Processed payment volume"
           />
           <KpiCard

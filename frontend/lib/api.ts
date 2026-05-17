@@ -23,7 +23,7 @@ export type Transaction = {
 export type AnalyticsSummary = {
   totalMerchants: number;
   totalTransactions: number;
-  transactionVolume: number;
+  totalVolume: number;
   approvalRate: number;
   pendingMerchants: number;
   highRiskMerchants: number;
